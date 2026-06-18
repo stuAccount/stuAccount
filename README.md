@@ -2,13 +2,13 @@
 
 ```text
 $ whoami
-> jesse zen | CS Explorer
+> jesse zen | Java Backend Dev
 
 $ cat interests.txt
-> compilers | automata theory | AI tooling | parsers
+> Backend Architecture · AI Integration · Distributed Systems
 
 $ echo $STATUS
-> 🟢 open to collaborate
+> 🟢 open to find a job 
 ```
 
 ---
@@ -25,13 +25,13 @@ $ echo $STATUS
 
 ---
 
-## 🐍 Contribution Graph
+## 📈 Contribution Graph
 
 ![Contribution Graph](https://githly.vercel.app/api/contribution?username=stuAccount&hide_border=true)
 
 ---
 
-## 🔥 Pinned Repos
+## 🚀 Repos & Activity
 
 <!-- RECENT_ACTIVITY:START -->
 <!-- RECENT_ACTIVITY:END -->
@@ -43,13 +43,13 @@ $ echo $STATUS
 
 ```text
 $ ls skills/
-> c++/    python/    javascript/    swift/
+> java/    spring/    redis/    mysql/    python/
 
 $ cat philosophy.txt
 > "Ship beats perfect — learn by building."
 
 $ uptime
-> coding since 2023 · still learning · always curious
+> coding since 2023 · backend focused · always curious
 ```
 
 </details>

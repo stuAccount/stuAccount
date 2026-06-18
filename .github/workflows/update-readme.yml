@@ -34,44 +34,66 @@ jobs:
             const activityLines = [];
             const seenRepos = new Set();
             for (const event of events.data) {
-              const repo = event.repo.name.split('/').pop();
+              const repoFullName = event.repo.name;
+              const repo = repoFullName.split('/').pop();
               const type = event.type;
 
               if (activityLines.length >= 8) break;
 
               if (type === 'PushEvent') {
                 const msg = (event.payload.commits?.[0]?.message || 'commit').split('\n')[0];
-                if (!seenRepos.has(repo)) {
-                  activityLines.push(`- 📝 Pushed \`${msg}\` in [${repo}](https://github.com/${event.repo.name})`);
-                  seenRepos.add(repo);
+                if (!seenRepos.has(repoFullName)) {
+                  activityLines.push(`- 📝 Pushed \`${msg}\` in [${repo}](https://github.com/${repoFullName})`);
+                  seenRepos.add(repoFullName);
                 }
               } else if (type === 'IssuesEvent') {
                 const title = event.payload.issue?.title || 'an issue';
                 const url = event.payload.issue?.html_url || '#';
-                activityLines.push(`- 🐛 ${event.payload.action} issue [${title}](${url})`);
+                if (!seenRepos.has(repoFullName)) {
+                  activityLines.push(`- 🐛 ${event.payload.action} issue [${title}](${url})`);
+                  seenRepos.add(repoFullName);
+                }
               } else if (type === 'PullRequestEvent') {
                 const title = event.payload.pull_request?.title || 'a PR';
                 const url = event.payload.pull_request?.html_url || '#';
-                activityLines.push(`- 🔀 ${event.payload.action} PR [${title}](${url})`);
+                if (!seenRepos.has(repoFullName)) {
+                  activityLines.push(`- 🔀 ${event.payload.action} PR [${title}](${url})`);
+                  seenRepos.add(repoFullName);
+                }
               } else if (type === 'WatchEvent') {
-                activityLines.push(`- ⭐ Starred [${repo}](https://github.com/${event.repo.name})`);
+                if (!seenRepos.has(repoFullName)) {
+                  activityLines.push(`- ⭐ Starred [${repo}](https://github.com/${repoFullName})`);
+                  seenRepos.add(repoFullName);
+                }
               } else if (type === 'CreateEvent' && event.payload.ref_type === 'repository') {
-                activityLines.push(`- 🆕 Created [${repo}](https://github.com/${event.repo.name})`);
+                if (!seenRepos.has(repoFullName)) {
+                  activityLines.push(`- 🆕 Created [${repo}](https://github.com/${repoFullName})`);
+                  seenRepos.add(repoFullName);
+                }
               }
             }
             sections.push('### 🕐 Recent Activity\n' + (activityLines.length > 0 ? activityLines.join('\n') : '- *No recent public activity*'));
 
             // --- Top Repos (by stars, forks, updated) ---
-            const repos = await github.rest.repos.listForUser({
-              username: username,
-              sort: 'updated',
-              direction: 'desc',
-              per_page: 30,
-              type: 'owner'
-            });
+            // Paginate to get all repos
+            let allRepos = [];
+            let page = 1;
+            while (true) {
+              const resp = await github.rest.repos.listForUser({
+                username: username,
+                sort: 'updated',
+                direction: 'desc',
+                per_page: 100,
+                page: page,
+                type: 'owner'
+              });
+              allRepos = allRepos.concat(resp.data);
+              if (resp.data.length < 100) break;
+              page++;
+            }
 
             // Sort by a composite: stars*3 + forks, pick top 6
-            const scored = repos.data
+            const scored = allRepos
               .filter(r => !r.fork && r.name !== username) // skip forks & profile repo
               .map(r => ({
                 name: r.name,
@@ -97,11 +119,16 @@ jobs:
 
       - name: Update README
         run: |
-          python3 -c "
-          import re, os
+          python3 << 'PYEOF'
+          import os, json
 
           readme = open('README.md', 'r').read()
-          activity = os.environ['ACTIVITY']
+          # The output is JSON-encoded (result-encoding defaults to json)
+          raw = os.environ['ACTIVITY']
+          activity = json.loads(raw) if raw.startswith('"') else raw
+          # Strip surrounding quotes if present
+          if isinstance(activity, str) and activity.startswith('"'):
+              activity = json.loads(activity)
 
           start = '<!-- RECENT_ACTIVITY:START -->'
           end = '<!-- RECENT_ACTIVITY:END -->'
@@ -115,7 +142,7 @@ jobs:
               print('README updated')
           else:
               print('Markers not found')
-          "
+          PYEOF
         env:
           ACTIVITY: ${{ steps.generate.outputs.result }}
 
