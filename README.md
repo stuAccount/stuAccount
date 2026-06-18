@@ -34,6 +34,20 @@ $ echo $STATUS
 ## 🚀 Repos & Activity
 
 <!-- RECENT_ACTIVITY:START -->
+### 🕐 Recent Activity
+- 📝 Pushed `commit` in [codex-app-proxy](https://github.com/stuAccount/codex-app-proxy)
+- 📝 Pushed `commit` in [kid-draw](https://github.com/stuAccount/kid-draw)
+- 📝 Pushed `commit` in [taobao-user-behavior-visualization-demo](https://github.com/stuAccount/taobao-user-behavior-visualization-demo)
+- 📝 Pushed `commit` in [render-markdown-pdf](https://github.com/stuAccount/render-markdown-pdf)
+- 📝 Pushed `commit` in [z-youtube](https://github.com/stuAccount/z-youtube)
+
+### 🏆 Top Repos
+- **[codex-app-proxy](https://github.com/stuAccount/codex-app-proxy)** `JavaScript` ⭐ 2 — A simple codex app proxy. 
+- **[kid-draw](https://github.com/stuAccount/kid-draw)** `C++` — 
+- **[taobao-user-behavior-visualization-demo](https://github.com/stuAccount/taobao-user-behavior-visualization-demo)** `Python` — A demo for visualization for Taobao's UserBehavior.csv in Py
+- **[render-markdown-pdf](https://github.com/stuAccount/render-markdown-pdf)** `Lua` — 
+- **[z-youtube](https://github.com/stuAccount/z-youtube)** `Java` — A YouTube-ish repo built from scratch using Springboot. 
+- **[janus-qt](https://github.com/stuAccount/janus-qt)** — 
 <!-- RECENT_ACTIVITY:END -->
 
 ---
