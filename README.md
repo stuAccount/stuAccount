@@ -52,7 +52,7 @@
 
 <!-- RECENT_ACTIVITY:START -->
 ### 🕐 Recent Activity
-- 🔀 closed PR [a PR](#)
+- *No recent public activity*
 
 ### 🏆 Top Repos
 - **[agent-inn](https://github.com/JesseZen/agent-inn)** `TypeScript` ⭐ 3 — A TUI-driven orchestrator for agent CLI proxying and…
